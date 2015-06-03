@@ -1,0 +1,96 @@
+<h1><code ng:non-bindable="">tree</code>
+<div><span class="hint">service in module <code ng:non-bindable="">ng-puremodels</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="ng-puremodels-service-page ng-puremodels-service-tree-page"><p>structure provider for any object, usefull for complex recurcive structures
+like trees, file systems, data structure etc</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_expandallasync">expandAllAsync(node, function)</h3>
+<div class="expandallasync"><div class="expandallasync-page"><p>expand all nodes. Should be used carefully due to performance</p>
+</div><h5 id="methods_expandallasync_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>node</td><td><a href="" class="label type-hint type-hint-node">node</a></td><td><div class="expandallasync-page"><p>to expand all sub nodes</p>
+</div></td></tr><tr><td>function</td><td><a href="" class="label type-hint type-hint-callback">callback</a></td><td><div class="expandallasync-page"><p>to call when done</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_expandnode">expandNode(node)</h3>
+<div class="expandnode"><div class="expandnode-page"><p>expand node if it was not expanded</p>
+</div><h5 id="methods_expandnode_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>node</td><td><a href="" class="label type-hint type-hint-node">node</a></td><td><div class="expandnode-page"><p>to expand</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_expandnode">expandNode()</h3>
+<div class="expandnode"><div class="expandnode-page"><p>collapse node if it was expanded</p>
+</div></div>
+</li>
+<li><h3 id="methods_getlastnodebypath">getLastNodeByPath(path)</h3>
+<div class="getlastnodebypath"><div class="getlastnodebypath-page"><p>return last node in path</p>
+</div><h5 id="methods_getlastnodebypath_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>path</td><td><a href="" class="label type-hint type-hint-array">array</a></td><td><div class="getlastnodebypath-page"><p>to node like [0, 2, 3]</p>
+</div></td></tr></tbody></table><h5 id="methods_getlastnodebypath_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getlastnodebypath-page"><p>tree node</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getnodesbypath">getNodesByPath(path)</h3>
+<div class="getnodesbypath"><div class="getnodesbypath-page"><p>return all node in path</p>
+</div><h5 id="methods_getnodesbypath_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>path</td><td><a href="" class="label type-hint type-hint-array">array</a></td><td><div class="getnodesbypath-page"><p>to node like [0, 2, 3]</p>
+</div></td></tr></tbody></table><h5 id="methods_getnodesbypath_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">array</a></td><td><div class="getnodesbypath-page"><p>tree node</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getnodesbyselectedpath">getNodesBySelectedPath()</h3>
+<div class="getnodesbyselectedpath"><div class="getnodesbyselectedpath-page"><p>return all nodes in path to selected node</p>
+</div><h5 id="methods_getnodesbyselectedpath_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">array</a></td><td><div class="getnodesbyselectedpath-page"><p>tree nodes</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getselectednode">getSelectedNode()</h3>
+<div class="getselectednode"><div class="getselectednode-page"><p>return selected node or undefined</p>
+</div></div>
+</li>
+<li><h3 id="methods_getselectednodeid">getSelectedNodeId()</h3>
+<div class="getselectednodeid"><div class="getselectednodeid-page"><p>return selected node Id or undefined</p>
+</div></div>
+</li>
+<li><h3 id="methods_nextnode">nextNode(node, function)</h3>
+<div class="nextnode"><div class="nextnode-page"><p>go to next node, up to the tree. If current node has children, go to first child
+if not, go next child in same parent node. When last child, return to node after parent node.
+Usefull to traverse tree.</p>
+</div><h5 id="methods_nextnode_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>node</td><td><a href="" class="label type-hint type-hint-node">node</a></td><td><div class="nextnode-page"><p>to toggle and select</p>
+</div></td></tr><tr><td>function</td><td><a href="" class="label type-hint type-hint-callback">callback</a></td><td><div class="nextnode-page"><p>to call when done with next node as a parameter</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_selectnode">selectNode(some)</h3>
+<div class="selectnode"><div class="selectnode-page"><p>mark node as a selected</p>
+</div><h5 id="methods_selectnode_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>some</td><td><a href="" class="label type-hint type-hint-node">node</a></td><td><div class="selectnode-page"><p>node to select</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_selectnodeandexpandparent">selectNodeAndExpandParent(node)</h3>
+<div class="selectnodeandexpandparent"><div class="selectnodeandexpandparent-page"><p>convinience method: select node and expand parent</p>
+</div><h5 id="methods_selectnodeandexpandparent_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>node</td><td><a href="" class="label type-hint type-hint-node">node</a></td><td><div class="selectnodeandexpandparent-page"><p>to toggle and select</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_selectnodeandloadchildren">selectNodeAndLoadChildren(node)</h3>
+<div class="selectnodeandloadchildren"><div class="selectnodeandloadchildren-page"><p>convinience method: select node and load its children if not yet loaded</p>
+</div><h5 id="methods_selectnodeandloadchildren_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>node</td><td><a href="" class="label type-hint type-hint-node">node</a></td><td><div class="selectnodeandloadchildren-page"><p>to toggle and select</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_selectnodeandloadchildren">selectNodeAndLoadChildren(node, function)</h3>
+<div class="selectnodeandloadchildren"><div class="selectnodeandloadchildren-page"><p>convinience method: select node and load its children if not yet loaded</p>
+</div><h5 id="methods_selectnodeandloadchildren_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>node</td><td><a href="" class="label type-hint type-hint-node">node</a></td><td><div class="selectnodeandloadchildren-page"><p>to toggle and select</p>
+</div></td></tr><tr><td>function</td><td><a href="" class="label type-hint type-hint-callback">callback</a></td><td><div class="selectnodeandloadchildren-page"><p>to call when done</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_toggleandselectexpandnode">toggleAndSelectExpandNode(node)</h3>
+<div class="toggleandselectexpandnode"><div class="toggleandselectexpandnode-page"><p>convinience method: toggle and select node</p>
+</div><h5 id="methods_toggleandselectexpandnode_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>node</td><td><a href="" class="label type-hint type-hint-node">node</a></td><td><div class="toggleandselectexpandnode-page"><p>to toggle and select</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_toggleexpandnode">toggleExpandNode()</h3>
+<div class="toggleexpandnode"><div class="toggleexpandnode-page"><p>toggle collapse state</p>
+</div></div>
+</li>
+<li><h3 id="methods_unselectnode">unselectNode(some)</h3>
+<div class="unselectnode"><div class="unselectnode-page"><p>mark node as a unselect</p>
+</div><h5 id="methods_unselectnode_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>some</td><td><a href="" class="label type-hint type-hint-node">node</a></td><td><div class="unselectnode-page"><p>node to select</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>

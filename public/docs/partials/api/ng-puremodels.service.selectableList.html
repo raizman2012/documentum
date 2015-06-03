@@ -1,0 +1,99 @@
+<h1><code ng:non-bindable="">selectableList</code>
+<div><span class="hint">service in module <code ng:non-bindable="">ng-puremodels</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="ng-puremodels-service-page ng-puremodels-service-selectablelist-page"><p>wrap array with select-unselect-event on select functionality
+selection can be &#39;single&#39; : only one index can be selected,
+and &#39;multi&#39; when number of elements are selected.</p>
+<p>Two modules of selection are not affecting each other.</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_getlist">getList()</h3>
+<div class="getlist"><div class="getlist-page"><p>return array of objects</p>
+</div></div>
+</li>
+<li><h3 id="methods_getselectedindex">getSelectedIndex()</h3>
+<div class="getselectedindex"><div class="getselectedindex-page"><p>return selected index in the array, or -1 if nothing selected</p>
+</div></div>
+</li>
+<li><h3 id="methods_getselectedobject">getSelectedObject()</h3>
+<div class="getselectedobject"><div class="getselectedobject-page"><p>return selected object in the array, or undefined if nothing selected</p>
+</div></div>
+</li>
+<li><h3 id="methods_multiselect">multiSelect(index)</h3>
+<div class="multiselect"><div class="multiselect-page"><p>select object in multi selection</p>
+</div><h5 id="methods_multiselect_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>index</td><td><a href="" class="label type-hint type-hint-integer">integer</a></td><td><div class="multiselect-page"><p>value of index to select</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_multitoggleselect">multiToggleSelect(index)</h3>
+<div class="multitoggleselect"><div class="multitoggleselect-page"><p>toggleSelect selection on object</p>
+</div><h5 id="methods_multitoggleselect_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>index</td><td><a href="" class="label type-hint type-hint-integer">integer</a></td><td><div class="multitoggleselect-page"><p>value of index to select</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_multiunselect">multiUnselect(index)</h3>
+<div class="multiunselect"><div class="multiunselect-page"><p>unselect object in multi selection</p>
+</div><h5 id="methods_multiunselect_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>index</td><td><a href="" class="label type-hint type-hint-integer">integer</a></td><td><div class="multiunselect-page"><p>value of index to select</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_selectall">selectAll()</h3>
+<div class="selectall"><div class="selectall-page"><p>select all objects</p>
+</div></div>
+</li>
+<li><h3 id="methods_selectindex">selectIndex(index)</h3>
+<div class="selectindex"><div class="selectindex-page"><p>change selected index and fire event if index was changed</p>
+</div><h5 id="methods_selectindex_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>index</td><td><a href="" class="label type-hint type-hint-integer">integer</a></td><td><div class="selectindex-page"><p>value of index to select</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_toggleall">toggleAll()</h3>
+<div class="toggleall"><div class="toggleall-page"><p>toggle  all objects multi selection</p>
+</div></div>
+</li>
+<li><h3 id="methods_unselectall">unselectAll()</h3>
+<div class="unselectall"><div class="unselectall-page"><p>unselect all objects</p>
+</div></div>
+</li>
+<li><h3 id="methods_unselectindex">unselectIndex()</h3>
+<div class="unselectindex"><div class="unselectindex-page"><p>unselect index and fire event if index was changed</p>
+</div></div>
+</li>
+<li><h3 id="methods_unselectindex">unselectIndex()</h3>
+<div class="unselectindex"><div class="unselectindex-page"><p>toggle selection and fire event if index was changed</p>
+</div></div>
+</li>
+</ul>
+</div>
+<div class="member property"><h2 id="properties">Properties</h2>
+<ul class="properties"><li><h3 id="properties_firechangemultiselectionevent">fireChangeMultiSelectionEvent</h3>
+<div class="firechangemultiselectionevent"><div class="firechangemultiselectionevent-page"><p>function to invoke on change multi selection event</p>
+</div></div>
+</li>
+<li><h3 id="properties_firechangeselectionevent">fireChangeSelectionEvent</h3>
+<div class="firechangeselectionevent"><div class="firechangeselectionevent-page"><p>function to invoke on change selection event</p>
+</div></div>
+</li>
+<li><h3 id="properties_indexof">indexOf</h3>
+<div class="indexof"><div class="indexof-page"><p>find index of object in list, based on &#39;equal&#39; method
+return index or -1</p>
+</div></div>
+</li>
+<li><h3 id="properties_list">list</h3>
+<div class="list"><div class="list-page"><p>array of objects</p>
+</div></div>
+</li>
+<li><h3 id="properties_multiselectedindexes">multiSelectedIndexes</h3>
+<div class="multiselectedindexes"><div class="multiselectedindexes-page"><p>array selected indexes</p>
+</div></div>
+</li>
+<li><h3 id="properties_multiselectedobjects">multiSelectedObjects</h3>
+<div class="multiselectedobjects"><div class="multiselectedobjects-page"><p>array selected objects</p>
+</div></div>
+</li>
+<li><h3 id="properties_multiselections">multiSelections</h3>
+<div class="multiselections"><div class="multiselections-page"><p>array of booleans for selected states</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>

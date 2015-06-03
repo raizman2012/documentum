@@ -1,0 +1,23 @@
+
+
+.slide-container {
+    max-height:999px;
+    -moz-transition: 1s;
+    -ms-transition: 1s;
+    -o-transition: 1s;
+    -webkit-transition: 1s;
+    transition: 1s;
+    overflow: hidden;
+}
+
+.slide-container.ng-hide {
+    max-height:1px;
+    overflow: hidden;
+}
+.fade-container {
+    transition: 0.5s linear all;
+    opacity: 1;
+}
+.fade-container.ng-hide {
+    opacity: 0;
+}

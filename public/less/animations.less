@@ -1,0 +1,38 @@
+@import '../lib/bootstrap/less/variables.less';
+
+.onchange {
+  background-color: white;
+  transition: background-color 0.26s linear 0s;
+  &[class*="-add"] {
+    background-color: @brand-success;
+  }
+
+}
+
+.onchange-reversed {
+  background-color: @brand-success;
+  transition: background-color 0.26s linear 0s;
+  &[class*="-add"] {
+    background-color: white;
+  }
+
+}
+
+.btn-onchange-success {
+  transition: background-color 0.26s linear 0s;
+  &[class*="-add"] {
+    background-color: @brand-success;
+  }
+
+}
+
+
+.folderSelectionChanged {
+  background-color: @table-bg;
+  transition: background-color 0.10s linear 0s;
+  &[class*="-add"] {
+    color: @table-border-color;
+  }
+}
+
+

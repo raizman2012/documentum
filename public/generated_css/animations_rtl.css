@@ -1,0 +1,27 @@
+.onchange {
+  background-color: white;
+  transition: background-color 0.26s linear 0s;
+}
+.onchange[class*="-add"] {
+  background-color: #5cb85c;
+}
+.onchange-reversed {
+  background-color: #5cb85c;
+  transition: background-color 0.26s linear 0s;
+}
+.onchange-reversed[class*="-add"] {
+  background-color: white;
+}
+.btn-onchange-success {
+  transition: background-color 0.26s linear 0s;
+}
+.btn-onchange-success[class*="-add"] {
+  background-color: #5cb85c;
+}
+.folderSelectionChanged {
+  background-color: transparent;
+  transition: background-color 0.1s linear 0s;
+}
+.folderSelectionChanged[class*="-add"] {
+  color: #dddddd;
+}

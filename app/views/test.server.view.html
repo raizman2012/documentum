@@ -1,0 +1,385 @@
+
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <!--script type="application/javascript" src="dctm-rest.js"/-->
+    <script>
+        dctmUser="testuser";
+        dctmPassword="dm123cloud";
+        dctmCurrentFolderId="";
+
+
+        function newDctmWithBasicAuth(pUrlBase,pUser,pPassword) {
+            this.urlBase=pUrlBase;
+            this.user=pUser;
+            this.password=pPassword;
+
+            this.getACSLink = function getACSLink(objectId) {
+                // fixme: get link properly from output
+                var resPart = "/objects/"+objectId+"/contents/content";
+                return this.dctmGET(resPart,null,onError);
+            };
+
+            this.getCabinets = function getCabinets( callback, onError) {
+                return this.dctmGET("/cabinets?inline=true", callback, onError);
+            };
+
+            this.getFolderSubfolders = function getFolderSubfolders( folderRes, callback, onError) {
+                return this.dctmGET(folderRes + "/folders?inline=true", callback, onError);
+            };
+
+            this.getFolderObjects = function getFolderObjects( folderRes, callback, onError) {
+                return this.dctmGET(folderRes + "/documents?inline=true&amp;view=all", callback, onError);
+            };
+
+
+            this.createDocument = function createDocument( data, callback, onError) {
+                return this.dctmPOST(dctmCurrentFolderId+"/objects", data, callback, onError);
+            };
+
+
+            this.dctmGET = function dctmGET(resource, onSuccess, onError) {
+                var http_request = new XMLHttpRequest();
+                try{
+                    http_request = new XMLHttpRequest();
+                } catch (e){
+                    // Internet Explorer Browsers
+                    try{
+                        http_request = new ActiveXObject("Msxml2.XMLHTTP");
+                    }catch (e) {
+                        try{
+                            http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                        }catch (e){
+                            // Something went wrong
+                            alert("sorry, ajax not supported in this browser !");
+                            return false;
+                        }
+                    }
+                }
+                http_request.onreadystatechange  = function(){
+                    if (http_request.readyState == 4  )
+                    {
+                        var jsonObj = null;
+                        var statusText = null;
+                        var status = http_request.status;
+                        // Javascript function JSON.parse to parse JSON data
+                        if (status>=200 && status<300) {
+                            jsonObj = JSON.parse(http_request.responseText);
+                            onSuccess(status, jsonObj, statusText);
+                        } else {
+                            statusText = http_request.statusText;
+                            onError(status,  statusText);
+                        }
+
+                    }
+                }
+                var resstr =  this.urlBase + resource;
+                var isAsync = (onSuccess) ? true : false;
+                if (http_request.withCredentials !== undefined) {
+                    http_request.withCredentials="true";
+                } else {
+                    alert("WITHOUT CREDENTIALS!");
+                }
+                http_request.open("GET", resstr, isAsync, this.user, this.password);
+                //http_request.setRequestHeader('Authorization','Basic '+btoa(this.user+":"+this.password));
+                http_request.setRequestHeader("Accept","application/json");
+                //http_request.setRequestHeader('Origin','http://172.21.12.165');
+                http_request.send();
+
+                if (!isAsync) {
+                    if (http_request.status >= 200 && http_request.status<300) {
+                        return JSON.parse(http_request.responseText);
+                    } else {
+                        // fixme: exception?
+                        alert("HTTP ERROR: "+http_request.status);
+                        onError( http_request.status, http_request.statusText);
+                        return null;
+                    }
+                }
+            };
+
+
+
+
+            this.dctmPOST = function dctmPOST(resource, data, onSuccess, onError) {
+                var http_request = new XMLHttpRequest();
+                try{
+                    http_request = new XMLHttpRequest();
+                } catch (e){
+                    // Internet Explorer Browsers
+                    try{
+                        http_request = new ActiveXObject("Msxml2.XMLHTTP");
+                    }catch (e) {
+                        try{
+                            http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                        }catch (e){
+                            // Something went wrong
+                            alert("sorry, ajax not supported in this browser !");
+                            return false;
+                        }
+                    }
+                }
+                http_request.onreadystatechange  = function(){
+                    if (http_request.readyState == 4  )
+                    {
+                        var jsonObj = null;
+                        var statusText = null;
+                        var status = http_request.status;
+                        // Javascript function JSON.parse to parse JSON data
+                        if (status>=200 && status<300) {
+                            jsonObj = JSON.parse(http_request.responseText);
+                            onSuccess(status, jsonObj, statusText);
+                        } else {
+                            statusText = http_request.StatusText;
+                            onError(status,  statusText);
+                        }
+
+                    }
+                }
+                var resstr =  this.urlBase + resource;
+
+                if (http_request.withCredentials !== undefined) {
+                    http_request.withCredentials="true";
+                } else {
+                    alert("WITHOUT CREDENTIALS!");
+                }
+
+                http_request.open("POST", resstr, true, this.user, this.password);
+                //http_request.setRequestHeader('Authorization','Basic '+btoa(this.user+":"+this.password));
+                http_request.setRequestHeader("Accept","application/vnd.emc.documentum+json");
+                //http_request.setRequestHeader('Access-Control-Allow-Origin','*');
+                http_request.send(data);
+            };
+            return this;
+
+        };
+
+
+        function listCabinets() {
+            this.dctm.getCabinets(onListCabinetsSuccess, onError);
+            //this.dctm.getCabinets(onDctmSuccess, onError);
+        };
+
+
+        this.dctm = newDctmWithBasicAuth(
+                "https://demo-server.trekflow.com:8443/dctm-rest/repositories/MyRepo"
+                ,dctmUser,dctmPassword);
+
+
+        function onDctmSuccess(status, jsonOBJ, statusText) {
+            document.getElementById("rest-dump").value=JSON.stringify(jsonOBJ);
+        }
+
+        function onError(status, statusText) {
+            document.getElementById("rest-dump").value="DCTM API ERROR: Status: "+status+": "+statusText;
+        }
+
+
+
+        function onListCabinetsSuccess(status, jsonOBJ, statusText) {
+            var text = "";
+            var cabinets=document.getElementById("dctm_cabinets");
+            showFolderContent(cabinets, jsonOBJ);
+        }
+
+
+        function expandFolder(listElement,folderRes) {
+            var ulElement = null;
+
+            signElement = listElement.childNodes[0];
+
+            if (listElement.childNodes[2]) {
+                ulElement = listElement.childNodes[2];
+                listElement.removeChild(ulElement);
+                signElement.innerHTML="[+]";
+            } else {
+                ulElement = document.createElement('ul');
+                listElement.appendChild(ulElement);
+                var onFolderSuccess = (function () {
+                    return function(status, folderContent, statusText) {
+                        showFolderContent(ulElement,folderContent);
+                    };
+                })();
+                dctm.getFolderSubfolders(folderRes, onFolderSuccess,onError);
+                signElement.innerHTML="[-]";
+            }
+
+
+
+        }
+
+        function showFolderContent(ulElement, jsonOBJ) {
+            document.getElementById("rest-dump").value=JSON.stringify(jsonOBJ);
+
+
+            while (ulElement.firstChild) {
+                ulElement.removeChild(ulElement.firstChild);
+            }
+
+            for (entryKey in jsonOBJ.entries) {
+                var entry = jsonOBJ.entries[entryKey];
+                var folderName =  entry.title;
+
+                var li = document.createElement('li');
+                //li.id = entry.id;
+                li.id = "/folders/"+ entry.content.properties.r_object_id;
+                // add link to expand foder
+                var expand =  document.createElement('a');
+                expand.href="";
+                expand.onclick=(function () {
+                    var listEntry = entry;
+                    var liElement = li;
+                    return function(event) {
+                        event.preventDefault();
+                        expandFolder(liElement,"/folders/"+listEntry.content.properties.r_object_id);
+                    };
+                })();
+                expand.appendChild(document.createTextNode("[+]"));
+                //var txt = document.createTextNode( entry.content.properties.r_object_id);
+                li.appendChild(expand);
+
+                // add link to list folder contents
+                var txt = document.createTextNode(folderName);
+                a = document.createElement('a');
+                // fixme
+                a.href="";
+                a.appendChild(txt);
+                a.onclick=(function () {
+                    var listEntry = entry;
+                    return function(event) {
+                        event.preventDefault();
+                        // get rid of innerHTML
+                        document.getElementById('dctm_current_path').innerHTML=listEntry.title;
+                        dctmCurrentFolderId="/folders/"+listEntry.content.properties.r_object_id;
+                        document.getElementById('dctm_current_id').innerHTML=listEntry.content.properties.r_object_id;
+                        listFolder(dctmCurrentFolderId);
+                    };
+                })();
+                li.appendChild(a);
+                ulElement.appendChild(li);
+            }
+        }
+
+
+        function startContentDownload(sysObjectId) {
+            var jsonOBJ = dctm.getACSLink(sysObjectId);
+            var ACSLink = null;
+            if (jsonOBJ) {
+                document.getElementById("rest-dump").value=JSON.stringify(jsonOBJ);
+                links = jsonOBJ["links"];
+                for (key in links) {
+                    link = links[key];
+                    if (link.rel === "http://identifiers.emc.com/linkrel/content-media") {
+                        ACSLink = link.href;
+                    }
+                }
+            }
+            if (ACSLink) {
+                document.getElementById("content_link").href=ACSLink;
+                document.getElementById("viewer_iframe").src=ACSLink;
+            } else {
+                document.getElementById("content_link").href="";
+                document.getElementById("viewer_iframe").src="about:blank";
+            }
+        }
+
+        function listFolder(folderId) {
+            dctm.getFolderObjects(folderId, onListFolderSuccess,onError);
+        }
+
+        function onListFolderSuccess(status, jsonOBJ, statusText) {
+            document.getElementById("rest-dump").value=JSON.stringify(jsonOBJ);
+            var text = "";
+            var objectsTable=document.getElementById("folder_objects");
+
+            while (objectsTable.firstChild) {
+                objectsTable.removeChild(objectsTable.firstChild);
+            }
+
+            for (entryKey in jsonOBJ.entries) {
+                var entry = jsonOBJ.entries[entryKey];
+                var tr = document.createElement('tr');
+                var td = document.createElement('td');
+                td.innerHTML=entry.content.properties.r_object_id;
+                tr.appendChild(td);
+
+                td = document.createElement('td');
+                var lnk=document.createElement('a');
+                var nameText = document.createTextNode(entry.title);
+                lnk.href="javascript:startContentDownload('"+entry.content.properties.r_object_id+"')";
+                lnk.appendChild(nameText);
+                td.appendChild(lnk);
+                tr.appendChild(td);
+
+                td = document.createElement('td');
+                td.innerHTML=entry.content.properties.r_object_type;
+                tr.appendChild(td);
+
+                td = document.createElement('td');
+                td.innerHTML=entry.content.properties.r_modify_date;
+                tr.appendChild(td);
+
+                td = document.createElement('td');
+                td.innerHTML=entry.content.properties.a_content_type;
+                tr.appendChild(td);
+
+
+                objectsTable.appendChild(tr);
+            }
+        }
+
+
+        function onPageLoad() {
+            form = document.getElementById("dctm_upload_form");
+            form.onsubmit = function(event) {
+                event.preventDefault();
+                var fileSelect = form = document.getElementById("file_select");
+                var file = fileSelect.files[0];
+                var formData = new FormData();
+                var props = { properties:
+                { object_name: file.name,
+                    r_object_type: "dm_document"}
+                };
+                //file.type="application/pdf";
+                formData.append("data",JSON.stringify(props));
+                formData.append("file",file,file.name);
+                dctm.createDocument(formData,onDctmSuccess,onError);
+            }
+        }
+
+
+    </script>
+    <title>Documentum REST API DEMO</title>
+</head>
+<body onload="onPageLoad()">
+<h1>Documentum REST API DEMO</h1>
+<p>Download <a id="content_link" href="">Download link</a><br/>
+    Preview:<br/>
+</p>
+<iframe id="viewer_iframe" src=""></iframe>
+<p>
+    Current folder name: <span id="dctm_current_path"/></span>  id: <span id="dctm_current_id"/></span><br/>
+<table id="folder_objects">
+</table>
+<form id="dctm_upload_form">
+    <input type="file" id="file_select"/>
+    <button type="submit" id="dctm_upload_button">Upload</button>
+</form>
+</p>
+
+<p>
+    <button type="button" onclick="listCabinets()">List Cabinets </button>
+</p>
+
+<p>
+    <Error Output:<br/>
+    <textarea id="rest-dump" rows="2" cols="80">
+    </textarea>
+</p>
+
+<ul id="dctm_cabinets">
+</ul>
+
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<div class="snippet" data-ng-controller="DocumentsTableController" categories="documents,table">
+
+    <!-- comment -->
+    <div class="snippet_body">
+
+
+
+
+        <ol class="breadcrumb">
+            <li >
+                <a ng-click="start()" >root</a>
+            </li>
+            <li ng-repeat="entry in currentPathAsArray" ng-class="$last ? 'active' : ''">
+                <a ng-click="goInObject(entry)" ng-hide="$last">{{entry.content.properties.object_name}}</a>
+                <span  ng-show="$last">{{entry.content.properties.object_name}}</span>
+            </li>
+        </ol>
+         <div class="panel panel-default">
+             <div class="panel-heading">
+
+                 Folder <strong>{{currentFolder.content.properties.object_name}}</strong>
+                 <div class="pull-right">
+
+                     <div class="btn-group btn-group-xs" role="group">
+
+                         <button class="btn btn-default" title="reload"
+                                 ng-click="reload()">
+                             <i class="fa fa-refresh ng-class:loading ? 'fa-spin':'';"></i>
+                         </button>
+                         <button class="btn btn-default" title="search"
+                                 ng-click="searchPanelOpen = !searchPanelOpen">
+                             <i class="fa fa-search"></i>
+                         </button>
+                     </div>
+
+
+                 </div>
+             </div>
+             <div class="panel-body" ng-if="currentFile">
+                 {{currentFile.content.properties.object_name}}
+                 <br />
+                 {{currentFile.contentURIEncoded}}
+                 <table class="table table-condensed">
+                     <tbody>
+                     <tr ng-repeat="(name, value) in currentFile.content.properties">
+                         <td>{{name}}</td>
+                         <td>{{value}}</td>
+                     </tr>
+                     </tbody>
+                 </table>
+             </div>
+             <table class="table table-bordered table-condensed" ng-if="currentFile == undefined">
+                 <thead>
+                 <tr>
+                     <th>Type</th>
+                     <th>Title</th>
+                     <th>Author</th>
+                     <th>Object Id</th>
+                 </tr>
+                 </thead>
+                 <tbody>
+                 <tr ng-repeat="entry in currentFolder.entries">
+                     <td>{{entry.content.properties.r_object_type}}</td>
+                     <td>{{entry.title}}</td>
+                     <td>{{entry.author[0].name}}</td>
+                     <td><a ng-disabled="loading" ng-click="goInObject(entry)">{{entry.content.properties.r_object_id}}</a>
+                     </td>
+                 </tr>
+                 </tbody>
+             </table>
+         </div>
+
+
+    </div>
+</div>

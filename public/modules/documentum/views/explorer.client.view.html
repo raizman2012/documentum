@@ -1,0 +1,143 @@
+<div class="snippet" data-ng-controller="ExplorerController" categories="documents,folders,table">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Browsing documents</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+
+
+            <ol class="breadcrumb" style="margin-bottom: 10px">
+                <!--<div style="display: inline-block" class="btn-group btn-group-sm " role="group">-->
+                    <!--<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>-->
+                    <!--</button>-->
+                    <!--<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-arrow-right"></span>-->
+                    <!--</button>-->
+
+                    <!--<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-arrow-up"></span>-->
+                    <!--</button>-->
+                <!--</div>-->
+                <span class="fa fa-road"> </span>
+                <li ng-repeat="node in treeFromData.getNodesBySelectedPath()">
+                    <a ng-if="!$last" ng-click="treeFromData.selectNode(node)">{{node.data.title}}</a>
+                    <span ng-if="$last">{{node.data.title}}</span>
+                </li>
+
+                <div class="btn-group btn-group-xs  pull-right">
+                    <button class="btn btn-default"><span class="fa fa-cog"></span></button>
+                </div>
+            </ol>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="tree tree-panel">
+                <!-- tree itself -->
+
+                <!-- show root node with special icon -->
+                <ul style="padding-left: 0px">
+                    <li>
+                       <span ng-class="{ active : treeFromData.getSelectedNodeId() == treeFromData.rootNode.id}">
+                           <i ng-click="treeFromData.toggleExpandNode(treeFromData.rootNode)"
+                              class="glyphicon glyphicon-tree-conifer"></i>
+                           <section style="display: inline"
+                                    ng-click="treeFromData.selectNodeAndLoadChildren(treeFromData.rootNode)">
+                               /
+                           </section></span>
+
+                        <!-- tree markup done with recursive directive -->
+                        <ul dx-start-with="treeFromData.rootNode">
+
+                            <li ng-repeat="node in $dxPrior.children" ng-if="!node.leaf">
+
+                                <!-- tree node markup depends on type of the node -->
+                <span ng-class="{ active : treeFromData.getSelectedNodeId() == node.id}">
+                    <i ng-click="treeFromData.toggleExpandNode(node)"
+                       class="glyphicon ng-class:node.leaf ? 'glyphicon-leaf' : node.expanded ? 'glyphicon-folder-open' : 'glyphicon-folder-close';"></i>
+                    <section style="display: inline" ng-click="treeFromData.selectNodeAndLoadChildren(node)">
+                        {{node.data.title}}
+                    </section>
+                </span>
+
+                                <!-- recursion tag: replaces with 'dx-start-with' -->
+                                <ul ng-if="node.expanded" dx-connect="node"/>
+                            </li>
+
+                        </ul>
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+
+                    <i title="{{treeFromData.getSelectedNode().data.content.properties.r_object_type}}"
+                       class="glyphicon ng-class:treeFromData.getSelectedNode().leaf ? 'glyphicon-leaf' : 'glyphicon-folder-close';"></i>
+                    <strong>{{treeFromData.getSelectedNode().data.content.properties.object_name}}</strong>
+
+                    <div class="pull-right">
+
+                        <div class="btn-group btn-group-xs" role="group">
+
+                            <button class="btn btn-default" title="reload"
+                                    ng-click="reload()">
+                                <i class="fa fa-refresh ng-class:documentumService.loading ? 'fa-spin':'';"></i>
+                            </button>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="panel-body" ng-if="treeFromData.getSelectedNode().leaf">
+
+                    {{treeFromData.getSelectedNode().data.contentURIEncoded}}
+                    <table class="table table-condensed table-hover">
+                        <tbody>
+                        <tr ng-repeat="(name, value) in treeFromData.getSelectedNode().data.content.properties">
+                            <td><strong>{{name}}</strong></td>
+                            <td>{{value}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel panel-body text-center" ng-if="documentumService.loading">
+                    <i class="fa fa-3x fa-spinner fa-spin text-center" style="color: #337ab7"></i>
+                </div>
+                <table ng-if="!documentumService.loading && !treeFromData.getSelectedNode().leaf"
+                       class="table table-bordered table-condensed table-striped table-hover"
+                       ng-if="!treeFromData.getSelectedNode().leaf">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Title</th>
+                        <th>Created</th>
+                        <th>Author</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="node in treeFromData.getSelectedNode().children">
+                        <td>
+                            <i ng-click="treeFromData.selectNodeAndExpandParent(node)"
+                               title="{{node.data.content.properties.r_object_type}}"
+                               class="glyphicon ng-class:node.leaf ? 'fa fa-file-pdf-o' : 'glyphicon-folder-close';"></i>
+                        </td>
+                        <td>{{node.data.title}}</td>
+                        <td>{{node.data.content.properties.r_creation_date}}</td>
+                        <td>{{node.data.author[0].name}}</td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" ng-if="treeFromData.getSelectedNode().children.length == 0">No entities</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
