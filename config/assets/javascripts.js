@@ -1,7 +1,7 @@
 module.exports = {
 
     dependencies: [{
-        files: ['./public/lib/jquery/dist/jquery.min.js',
+        files: ['./public/lib/jquery/jquery.min.js',
             './public/lib/bootstrap/dist/js/bootstrap.min.js',
             './public/lib/angular/angular.js',
             './public/lib/angular-animate/angular-animate.js',
@@ -23,6 +23,8 @@ module.exports = {
             './public/lib/pdfjs-dist/build/pdf.js',
             './public/lib/angular-pdf/dist/angular-pdf.js',
             './public/lib/ng-puremodels/puremodels.js',
+            './public/lib/ng-puremodels/puremodels.templates.js',
+            './public/lib/angular-file-upload/angular-file-upload.js',
             './public/lib/jquery-ui/jquery-ui.js']
     }],
 

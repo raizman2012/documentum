@@ -1,7 +1,7 @@
-<div class="snippet" data-ng-controller="ExplorerController" categories="documents,folders,table">
+<div data-ng-controller="ExplorerController" >
     <div class="row">
         <div class="col-md-12">
-            <h3>Browsing documents</h3>
+            <h3 translate>explorer</h3>
         </div>
     </div>
 
@@ -9,15 +9,16 @@
         <div class="col-md-12">
 
 
-            <ol class="breadcrumb" style="margin-bottom: 10px">
+            <ol class="breadcrumb "
+                style="margin-bottom: 10px; border-style: solid; border-width:1px; border-color:  #ddd">
                 <!--<div style="display: inline-block" class="btn-group btn-group-sm " role="group">-->
-                    <!--<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>-->
-                    <!--</button>-->
-                    <!--<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-arrow-right"></span>-->
-                    <!--</button>-->
+                <!--<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>-->
+                <!--</button>-->
+                <!--<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-arrow-right"></span>-->
+                <!--</button>-->
 
-                    <!--<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-arrow-up"></span>-->
-                    <!--</button>-->
+                <!--<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-arrow-up"></span>-->
+                <!--</button>-->
                 <!--</div>-->
                 <span class="fa fa-road"> </span>
                 <li ng-repeat="node in treeFromData.getNodesBySelectedPath()">
@@ -25,22 +26,191 @@
                     <span ng-if="$last">{{node.data.title}}</span>
                 </li>
 
-                <div class="btn-group btn-group-xs  pull-right">
-                    <button class="btn btn-default"><span class="fa fa-cog"></span></button>
+
+                <div class="btn-group btn-group-xs pull-right" role="group">
+                    <button type="button" class="btn btn-default" ng-click="toggleUploadPanel()">
+                        <span class="fa fa-upload"></span>
+
+                    </button>
+                    <button type="button" class="btn btn-default" ng-click="test()">
+                        <span class="fa fa-check"></span>
+                    </button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-expanded="false">
+                        <span class="fa fa-cog"></span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ng-click="show.tree = !show.tree"><i class="fa fa-fw ng-class:show.tree ? 'fa-check':''; "/>&nbsp;
+                            folders</a></li>
+                        <li><a ng-click="show.toolbar = !show.toolbar"><i
+                                class="fa fa-fw ng-class:show.toolbar ? 'fa-check':''; "/>&nbsp; path</a></li>
+                        <li><a ng-click="show.path = !show.path"><i class="fa fa-fw ng-class:show.path ? 'fa-check':''; "/>&nbsp;
+                            toolbar</a></li>
+                        <li><a ng-click="show.preview = !show.preview"><i
+                                class="fa fa-fw ng-class:show.preview ? 'fa-check':''; "/>&nbsp; paging</a></li>
+                    </ul>
                 </div>
             </ol>
 
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-4">
-            <div class="tree tree-panel">
-                <!-- tree itself -->
+    <div class="row animate-if" ng-if="asyncMessages.objectsMap['upload'][messageId] !== undefined"
+         style="margin-bottom: 10px; ">
+        <div class="col-md-12">
+            <div ng-if="asyncMessages.objectsMap['upload'][messageId].type == 'failure'" class="alert alert-danger">
+                <i class="fa fa-warning"/>&nbsp; {{asyncMessages.objectsMap['upload'][messageId].msg}}
+            </div>
 
-                <!-- show root node with special icon -->
-                <ul style="padding-left: 0px">
-                    <li>
+            <div ng-if="asyncMessages.objectsMap['upload'][messageId].type == 'success'" class="alert alert-success">
+                <i class="fa fa-check"/>&nbsp; {{asyncMessages.objectsMap['upload'][messageId].msg}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row animate-if" ng-if="show.upload" style="margin-bottom: 10px; ">
+
+        <div class="col-md-3">
+
+            <h3>Select files</h3>
+
+            <div ng-show="uploader.isHTML5">
+                <!-- 3. nv-file-over uploader="link" over-class="className"
+                <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
+                    Base drop zone
+                </div>
+-->
+                <!-- Example: nv-file-drop="" uploader="{Object}" options="{Object}" filters="{String}" -->
+
+                <div nv-file-drop="" uploader="uploader" options="{ url: '/foo' }">
+                    <div nv-file-over="" uploader="uploader" over-class="another-file-over-class"
+                         class="well my-drop-zone" translate>drop_here</div>
+                </div>
+
+            </div>
+
+            <!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
+            Multiple
+            <input type="file" nv-file-select="" uploader="uploader" multiple/><br/>
+
+            Single
+            <input type="file" nv-file-select="" uploader="uploader"/>
+        </div>
+
+        <div class="col-md-9" style="margin-bottom: 40px">
+
+            <h3>Upload queue</h3>
+
+            <p>Queue length: {{ uploader.queue.length }}</p>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="50%">Name</th>
+                    <th ng-show="uploader.isHTML5">Size</th>
+                    <th ng-show="uploader.isHTML5">Progress</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in uploader.queue">
+                    <td><strong>{{ item.file.name }}</strong></td>
+                    <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                    <td ng-show="uploader.isHTML5">
+                        <div class="progress" style="margin-bottom: 0;">
+                            <div class="progress-bar" role="progressbar"
+                                 ng-style="{ 'width': item.progress + '%' }"></div>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                        <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                        <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                    </td>
+                    <td nowrap>
+                        <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()"
+                                ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                            <span class="glyphicon glyphicon-upload"></span> Upload
+                        </button>
+                        <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()"
+                                ng-disabled="!item.isUploading">
+                            <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                        </button>
+                        <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                            <span class="glyphicon glyphicon-trash"></span> Remove
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div>
+                <div>
+                    Queue progress:
+                    <div class="progress" style="">
+                        <div class="progress-bar" role="progressbar"
+                             ng-style="{ 'width': uploader.progress + '%' }"></div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()"
+                        ng-disabled="!uploader.getNotUploadedItems().length">
+                    <span class="glyphicon glyphicon-upload"></span> Upload all
+                </button>
+                <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()"
+                        ng-disabled="!uploader.isUploading">
+                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+                </button>
+                <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()"
+                        ng-disabled="!uploader.queue.length">
+                    <span class="glyphicon glyphicon-trash"></span> Remove all
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-4" ng-if="show.tree">
+            <div class="panel panel-default ">
+                <div class="panel-heading">
+
+                    <div class="btn-group btn-group-xs" role="group">
+                        <button type="button" class="btn btn-default btn-xs ng-class:show.treeAsTree ? 'active' : '';"
+                                ng-click="toggleTreeFolders()" translate>tree</button>
+                        <button type="button" class="btn btn-default btn-xs ng-class:show.treeAsTree ? '' : 'active';"
+                                ng-click="toggleTreeFolders()" translate>folders</button>
+                    </div>
+                    &nbsp;
+                    <div class="btn-group btn-group-xs pull-right" role="group">
+                        <button type="button" class="btn btn-default" ng-click="hideTree()">
+                            <span class="fa fa-close"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <table ng-if="!show.treeAsTree" class="table table-bordered table-condensed table-hover">
+                    <tbody>
+                    <tr>
+                        <td><i ng-click="selectParent()" class="fa fa-folder-open"/>&nbsp; ..</td>
+                    </tr>
+                    <tr ng-repeat="node in treeFromData.getSelectedNode().children | filter:{leaf:false}">
+                        <td><i class="fa fa-folder" ng-click="treeFromData.selectNodeAndLoadChildren(node)"/>&nbsp;
+                            {{node.data.title}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="tree" ng-if="show.treeAsTree">
+                    <!-- tree itself -->
+
+                    <!-- show root node with special icon -->
+                    <ul style="padding-left: 0px">
+                        <li>
                        <span ng-class="{ active : treeFromData.getSelectedNodeId() == treeFromData.rootNode.id}">
                            <i ng-click="treeFromData.toggleExpandNode(treeFromData.rootNode)"
                               class="glyphicon glyphicon-tree-conifer"></i>
@@ -49,31 +219,34 @@
                                /
                            </section></span>
 
-                        <!-- tree markup done with recursive directive -->
-                        <ul dx-start-with="treeFromData.rootNode">
+                            <!-- tree markup done with recursive directive -->
+                            <ul dx-start-with="treeFromData.rootNode">
 
-                            <li ng-repeat="node in $dxPrior.children" ng-if="!node.leaf">
+                                <li ng-repeat="node in $dxPrior.children" ng-if="!node.leaf">
 
-                                <!-- tree node markup depends on type of the node -->
+                                    <!-- tree node markup depends on type of the node -->
                 <span ng-class="{ active : treeFromData.getSelectedNodeId() == node.id}">
                     <i ng-click="treeFromData.toggleExpandNode(node)"
                        class="glyphicon ng-class:node.leaf ? 'glyphicon-leaf' : node.expanded ? 'glyphicon-folder-open' : 'glyphicon-folder-close';"></i>
-                    <section style="display: inline" ng-click="treeFromData.selectNodeAndLoadChildren(node)">
+                    <section style="display: inline" ng-click="selectNodeCustom(node)">
                         {{node.data.title}}
                     </section>
                 </span>
 
-                                <!-- recursion tag: replaces with 'dx-start-with' -->
-                                <ul ng-if="node.expanded" dx-connect="node"/>
-                            </li>
+                                    <!-- recursion tag: replaces with 'dx-start-with' -->
+                                    <ul ng-if="node.expanded" dx-connect="node"/>
+                                </li>
 
-                        </ul>
+                            </ul>
 
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
+
+
         </div>
-        <div class="col-md-8">
+        <div class="ng-class:show.tree ? 'col-md-8':'col-md-12';">
             <div class="panel panel-default">
                 <div class="panel-heading">
 
@@ -84,7 +257,10 @@
                     <div class="pull-right">
 
                         <div class="btn-group btn-group-xs" role="group">
-
+                            <button class="btn btn-default" title="show folders"
+                                    ng-click="toggleTree()">
+                                <i class="fa fa-columns"></i>
+                            </button>
                             <button class="btn btn-default" title="reload"
                                     ng-click="reload()">
                                 <i class="fa fa-refresh ng-class:documentumService.loading ? 'fa-spin':'';"></i>
@@ -94,9 +270,13 @@
 
                     </div>
                 </div>
+
                 <div class="panel-body" ng-if="treeFromData.getSelectedNode().leaf">
 
-                    {{treeFromData.getSelectedNode().data.contentURIEncoded}}
+                    <div ng-if="treeFromData.getSelectedNode().data.trustedResourceUrl">
+                        <iframe width="100%" height="400"
+                                ng-src="{{treeFromData.getSelectedNode().data.trustedResourceUrl}}"/>
+                    </div>
                     <table class="table table-condensed table-hover">
                         <tbody>
                         <tr ng-repeat="(name, value) in treeFromData.getSelectedNode().data.content.properties">
@@ -109,31 +289,43 @@
                 <div class="panel panel-body text-center" ng-if="documentumService.loading">
                     <i class="fa fa-3x fa-spinner fa-spin text-center" style="color: #337ab7"></i>
                 </div>
-                <table ng-if="!documentumService.loading && !treeFromData.getSelectedNode().leaf"
+                <table ng-if="documentumService.currentError != undefined" style="width: 100%">
+                    <tbody>
+                    <tr>
+                        <td class="alert alert-danger">{{documentumService.currentError}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table ng-if="documentumService.currentError == undefined && !documentumService.loading && !treeFromData.getSelectedNode().leaf"
                        class="table table-bordered table-condensed table-striped table-hover"
                        ng-if="!treeFromData.getSelectedNode().leaf">
                     <thead>
                     <tr>
                         <th></th>
-                        <th>Title</th>
-                        <th>Created</th>
-                        <th>Author</th>
+                        <th><span translate>title</span><span sort-th sorting="treeFromData.getSelectedNode().sortableChildren.sorting"
+                                       pname="'data.title'"/></th>
+                        <th><span translate>created</span><span sort-th sorting="treeFromData.getSelectedNode().sortableChildren.sorting"
+                                         pname="'data.content.properties.r_creation_date'"/></th>
+                        <th><span translate>author</span></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="node in treeFromData.getSelectedNode().children">
+                    <tr ng-repeat="node in treeFromData.getSelectedNode().sortableChildren.list">
                         <td>
-                            <i ng-click="treeFromData.selectNodeAndExpandParent(node)"
+                            <i ng-click="selectNodeCustom(node)"
                                title="{{node.data.content.properties.r_object_type}}"
-                               class="glyphicon ng-class:node.leaf ? 'fa fa-file-pdf-o' : 'glyphicon-folder-close';"></i>
+                               class="ng-class:node.leaf ? 'fa fa-file-pdf-o' : 'glyphicon glyphicon-folder-close';"></i>
                         </td>
                         <td>{{node.data.title}}</td>
                         <td>{{node.data.content.properties.r_creation_date}}</td>
                         <td>{{node.data.author[0].name}}</td>
-                        </td>
+                        <td><a ng-href="/#!/editor/{{node.data.content.properties.r_object_id}}"><i
+                               title="view/edit"
+                               class="ng-class:node.leaf ? 'fa fa-pencil-square-o' : 'fa fa-info';"></i></a></td>
                     </tr>
                     <tr>
-                        <td colspan="4" ng-if="treeFromData.getSelectedNode().children.length == 0">No entities</td>
+                        <td colspan="5" ng-if="treeFromData.getSelectedNode().children.length == 0">No entities</td>
                     </tr>
                     </tbody>
                 </table>

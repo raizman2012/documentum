@@ -19,6 +19,14 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
             state('viewer', {
                 url: '/viewer',
                 templateUrl: '/modules/documentum/views/viewer.client.view.html'
+            }).
+            state('viewerLocal', {
+                url: '/viewer/:objectId',
+                templateUrl: '/modules/documentum/views/viewer.client.view.html'
+            }).
+            state('editor', {
+                url: '/editor/:objectId',
+                templateUrl: '/modules/documentum/views/editor.client.view.html'
             });
     }
 ]);

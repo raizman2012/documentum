@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function () {
     // Init module configuration options
     var applicationModuleName = 'documentum.public';
-    var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ngRoute', 'ngCookies', 'pdf', 'ui.router', 'ui.bootstrap', 'ui.utils', 'dotjem.angular.tree', 'hljs', 'pascalprecht.translate', 'ngDragDrop', 'ng-puremodels'];
+    var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'angularFileUpload', 'ngRoute', 'ngCookies', 'pdf', 'ui.router', 'ui.bootstrap', 'ui.utils', 'dotjem.angular.tree', 'hljs', 'pascalprecht.translate', 'ngDragDrop', 'ng-puremodels'];
 
     // Add a new vertical module
     var registerModule = function (moduleName, dependencies) {

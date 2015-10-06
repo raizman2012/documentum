@@ -55,7 +55,8 @@
 </head>
 
 
-<body class="ng-cloak">
+<body class="ng-cloak" ng-controller="PageController">
+<tour step="currentStep">
 <header data-ng-include="'modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>
 <section class="content" style="margin-top: 50px">
     <section class="container">
@@ -82,7 +83,7 @@
     <p><a href="http://browsehappy.com" class="btn btn-primary btn-lg" role="button">Yes, upgrade my browser!</a></p>
 </section>
 <![endif]-->
-
+</tour>
 </body>
 
 </html>

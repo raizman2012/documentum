@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('documentum').controller('AngularPdfCtrl', ['$scope', function($scope) {
-    console.log('here');
+    console.log('here AngularPdfCtrl');
     $scope.pdfName = 'Relativity: The Special and General Theory by Albert Einstein';
     $scope.pdfUrl = 'partials/relativity.pdf';
     $scope.scroll = 0;

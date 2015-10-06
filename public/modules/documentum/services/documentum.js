@@ -1,4 +1,4 @@
-angular.module('documentum').factory('documentum', ['$http', function ($http) {
+angular.module('documentum').factory('documentum', ['$http', '$sce', function ($http, $sce) {
     var res = function (baseUrl) {
 
         var _this = this;
@@ -46,8 +46,13 @@ angular.module('documentum').factory('documentum', ['$http', function ($http) {
                         var link = data.links[key];
                         if (link.rel === "http://identifiers.emc.com/linkrel/content-media") {
                             _this.currentFile.contentURIEncoded = encodeURI(link.href);
-                            console.log(link.href);
-                            //console.log(_this.currentFile.contentURIEncoded);
+                            _this.currentFile.trustedResourceUrl= $sce.trustAsResourceUrl(link.href);
+                            _this.currentFile.trustedResourceUrlEncoded= encodeURI(_this.currentFile.trustedResourceUrl);
+
+                            var officeUrl = 'http://view.officeapps.live.com/op/view.aspx?src='+encodeURI(link.href);
+                            _this.currentFile.viewOfficeUrl = $sce.trustAsResourceUrl(officeUrl);
+
+
                         }
                     }
                 });
@@ -68,11 +73,26 @@ angular.module('documentum').factory('documentum', ['$http', function ($http) {
             _this.dctmGET("/folders/" + entry.content.properties.r_object_id + '/objects?inline=true', onSuccess, onError);
         };
 
-        _this.getACSLink = function getACSLink(objectId, onSuccess) {
+        _this.getUploadUrl = function(dctmCurrentFolderId) {
+            return _this.baseUrl+'/folders/'+dctmCurrentFolderId+'/objects';
+        };
+
+        _this.getACSLink = function getACSLink(objectId, onSuccess, onError) {
             // fixme: get link properly from output
             var resPart = "/objects/" + objectId + "/contents/content";
-            _this.dctmGET(resPart, onSuccess);
+            _this.dctmGET(resPart, onSuccess, onError);
         };
+
+        _this.getObject = function getACSLink(objectId, onSuccess, onError) {
+
+            var resPart = "/objects/" + objectId;
+            _this.dctmGET(resPart, onSuccess, onError);
+        };
+
+        _this.getAuthorizationHeader = function() {
+            var aheader = 'Basic ' + btoa(dctmUser + ":" + dctmPassword);
+            return aheader;
+        }
 
         _this.dctmGET = function (resource, onSuccess, onError) {
             _this.loading = true;
@@ -96,6 +116,9 @@ angular.module('documentum').factory('documentum', ['$http', function ($http) {
             }).
                 error(function (data, status, headers, config) {
                     console.log('error:', data);
+                    if (data == null) {
+                        data = { msg : 'Can not get data from documentum service'}
+                    }
                     _this.loading = false;
                     _this.currentError = data;
                     if (onError !== undefined) {
